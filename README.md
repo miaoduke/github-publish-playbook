@@ -24,7 +24,8 @@ github-publish-playbook/
 │   ├── 04_README与文档工程.md    README & documentation craft  README 与文档工程
 │   ├── 05_本地git初始化与安全提交.md Local git init & safe first commit  本地 git 初始化与安全提交
 │   ├── 06_建仓推送与安全扫描.md    Repo creation, push & security scanning  建仓、推送与安全扫描
-│   └── 07_发布后运营与GitHub配置.md Post-release ops & GitHub config  发布后运营与配置
+│   ├── 07_发布后运营与GitHub配置.md Post-release ops & GitHub config  发布后运营与配置
+│   └── 08_发布流程图与门禁.md     Release flow diagram & stage gates  发布流程图与门禁
 ├── templates/                 Reusable compliance file templates  可复用合规模板
 │   ├── LICENSE.mt             MIT template (author-signature aligned)  MIT 模板（署名）
 │   ├── THIRDPARTY.mt          Third-party license declaration template  第三方许可声明模板
@@ -69,6 +70,38 @@ github-publish-playbook/
 
 ---
 
+## 🗺️ Release Flow Diagram / 发布流程图
+
+> A Mermaid flowchart rendering the 0→7 publish pipeline, including the **two decision loops** (redaction and check-ignore) and the final gate before **Public**. See `SOP/08` for the full-size diagram + per-stage input→output→gate table.
+> Mermaid 绘制 0→7 发布管线，含**两个校验回环**（脱敏、check-ignore）与转 **Public** 前的最终闸门。完整尺寸图 + 逐阶段「输入→产出→验证门」表见 `SOP/08`。
+
+```mermaid
+flowchart TD
+    S([Start 开始]) --> P0[Phase 0<br/>总清单<br/>SOP/00]
+    P0 --> P1[Phase 1<br/>脱敏与保密<br/>SOP/01]
+    P1 --> Q1{敏感扫描<br/>真实标识<br/>0 命中?}
+    Q1 -- 否 / No --> P1
+    Q1 -- 是 / Yes --> P2[Phase 2<br/>内容分层 + .gitignore<br/>SOP/02]
+    P2 --> Q2{check-ignore<br/>私有文件<br/>全忽略?}
+    Q2 -- 否 / No --> P2
+    Q2 -- 是 / Yes --> P3[Phase 3<br/>社区文件与合规<br/>SOP/03]
+    P3 --> P4[Phase 4<br/>README 文档工程<br/>SOP/04]
+    P4 --> P5[Phase 5<br/>本地 git 初始化<br/>+ 安全提交<br/>SOP/05]
+    P5 --> R{历史含<br/>敏感数据?}
+    R -- 是 / Yes --> RW[filter-repo<br/>重写历史<br/>先备份原历史]
+    RW --> P5
+    R -- 否 / No --> P6[Phase 6<br/>建仓 Private<br/>+ 推送 + 安全扫描<br/>SOP/06]
+    P6 --> Q3{最终<br/>自检通过?}
+    Q3 -- 否 / No --> P1
+    Q3 -- 是 / Yes --> PUB[转 Public<br/>Secret Scanning /<br/>Dependabot / CodeQL]
+    PUB --> P7[Phase 7<br/>发布后运营<br/>SOP/07]
+    P7 --> E([Done 完成])
+```
+
+> **Reading the loops:** a loop pointing back to a phase means **the phase is not complete until the check passes** — that is the core of this playbook's safety model. 回环含义：**校验通过才算该阶段完成**——这正是本经验库安全模型的核心。
+
+---
+
 ## 🗂️ The Backbone SOPs / 骨干 SOP 一览
 
 - [**SOP/00_总清单_发布自检**](SOP/00_总清单_发布自检.md) — One-page master release checklist (English + 中文). 一页发布总清单。
@@ -79,6 +112,7 @@ github-publish-playbook/
 - [**SOP/05_本地git初始化与安全提交**](SOP/05_本地git初始化与安全提交.md) — init, signature, safe add, check-ignore, history rewrite. 本地 git 初始化与安全提交。
 - [**SOP/06_建仓推送与安全扫描**](SOP/06_建仓推送与安全扫描.md) — gh CLI create/push, Secret Scanning, CodeQL, Dependabot. 建仓、推送与安全扫描。
 - [**SOP/07_发布后运营与GitHub配置**](SOP/07_发布后运营与GitHub配置.md) — Sponsor, releases, follow-up, keep separate repos. 发布后运营与配置。
+- [**SOP/08_发布流程图与门禁**](SOP/08_发布流程图与门禁.md) — Mermaid release flow + per-stage input→output→gate table. 发布流程图与逐阶段门禁表。
 - [**lessons/经验教训与反模式**](lessons/经验教训与反模式.md) — The consolidated gremlin log (gits-only, no secrets). 踩坑大全与反模式。
 
 Detailed table of contents inside README of each folder. 详见各目录内索引。
