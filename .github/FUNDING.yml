@@ -1,0 +1,9 @@
+# These are supported funding model platforms
+# 支持的资金平台（全注释时 GitHub 不显示 Sponsor 按钮）
+# 保持与两个已发布项目一致的默认：全注释占位。若要启用，取消注释并填写。
+# Kept consistent with the two published projects: all-commented placeholder (no Sponsor button).
+# 捐赠入口以 README 底部的微信/支付宝收款二维码为准（assets/）。
+
+github: # Replace with up to 4 GitHub Sponsors-enabled usernames e.g., [user1, user2]
+patreon: # Replace with a single Patreon username
+custom: # Replace with up to 4 custom sponsorship URLs e.g., ['link1', 'link2']

@@ -1,0 +1,22 @@
+# ---- Private (none in this repo, kept as guard) ----
+_private/
+_private_不上传/
+_private_not_upload/
+
+# ---- Python bytecode ----
+__pycache__/
+*.py[cod]
+
+# ---- Runtime logs ----
+*.log
+
+# ---- OS / registry / captures ----
+*.reg
+*.hiv
+*.pcap
+
+# ---- OS junk ----
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
