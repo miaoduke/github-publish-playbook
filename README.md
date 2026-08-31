@@ -5,9 +5,9 @@
 
 > 本仓库是一份**可持续升级的可执行经验库**，沉淀自两个真实开源发布项目：**蛟龙15K** 笔记本优化项目 与 **Acer A615-51G** 优化项目。它记录了把个人逆向/电源调优项目**安全地发布为公开 GitHub 仓库**的所有**踩坑教训、检查清单、合规模板与分步 SOP**。每一条都是**真机实测、花钱买来的经验**，见各文件详述。
 
-> **How to use:** Read the full checklist at `SOP/00_总清单_发布自检.md` first. Then follow the phase-by-phase SOPs `SOP/01_...`→`SOP/06_...`. Templates live in `templates/`. Lessons are cross-referenced from each phase. When you learn something new or meet a new gremlin, **append it to the relevant SOP and update `00_总清单`** — this playbook is meant to grow, not to be static.
+> **How to use:** Read the full checklist at `SOP/00_总清单_发布自检.md` first. Then follow the phase-by-phase SOPs `SOP/01_...`→`SOP/08_...` (see the `SOP/08` flow diagram to orient yourself). Templates live in `templates/`. Lessons are cross-referenced from each phase. When you learn something new or meet a new gremlin, **append it to the relevant SOP and update `00_总清单`** — this playbook is meant to grow, not to be static.
 
-> **如何使用：** 先通读 `SOP/00_总清单_发布自检.md` 完整清单；再按 `SOP/01_...`→`SOP/06_...` 的分阶段 SOP 执行；模板在 `templates/`；每阶段的「坑」互相引用。当你踩到新坑或学到新方法，**把它追加到对应 SOP 并更新 `00_总清单`**——这份手册是为"生长"而设计的，不是静态文档。
+> **如何使用：** 先通读 `SOP/00_总清单_发布自检.md` 完整清单；再按 `SOP/01_...`→`SOP/08_...` 的分阶段 SOP 执行（先用 `SOP/08` 的流程图找准定位）；模板在 `templates/`；每阶段的「坑」互相引用。当你踩到新坑或学到新方法，**把它追加到对应 SOP 并更新 `00_总清单`**——这份手册是为"生长"而设计的，不是静态文档。
 
 ---
 
@@ -80,20 +80,20 @@ flowchart TD
     S([Start 开始]) --> P0[Phase 0<br/>总清单<br/>SOP/00]
     P0 --> P1[Phase 1<br/>脱敏与保密<br/>SOP/01]
     P1 --> Q1{敏感扫描<br/>真实标识<br/>0 命中?}
-    Q1 -- 否 / No --> P1
-    Q1 -- 是 / Yes --> P2[Phase 2<br/>内容分层 + .gitignore<br/>SOP/02]
+    Q1 -- "否 / No" --> P1
+    Q1 -- "是 / Yes" --> P2[Phase 2<br/>内容分层 + .gitignore<br/>SOP/02]
     P2 --> Q2{check-ignore<br/>私有文件<br/>全忽略?}
-    Q2 -- 否 / No --> P2
-    Q2 -- 是 / Yes --> P3[Phase 3<br/>社区文件与合规<br/>SOP/03]
+    Q2 -- "否 / No" --> P2
+    Q2 -- "是 / Yes" --> P3[Phase 3<br/>社区文件与合规<br/>SOP/03]
     P3 --> P4[Phase 4<br/>README 文档工程<br/>SOP/04]
     P4 --> P5[Phase 5<br/>本地 git 初始化<br/>+ 安全提交<br/>SOP/05]
     P5 --> R{历史含<br/>敏感数据?}
-    R -- 是 / Yes --> RW[filter-repo<br/>重写历史<br/>先备份原历史]
+    R -- "是 / Yes" --> RW[filter-repo<br/>重写历史<br/>先备份原历史]
     RW --> P5
-    R -- 否 / No --> P6[Phase 6<br/>建仓 Private<br/>+ 推送 + 安全扫描<br/>SOP/06]
+    R -- "否 / No" --> P6[Phase 6<br/>建仓 Private<br/>+ 推送 + 安全扫描<br/>SOP/06]
     P6 --> Q3{最终<br/>自检通过?}
-    Q3 -- 否 / No --> P1
-    Q3 -- 是 / Yes --> PUB[转 Public<br/>Secret Scanning /<br/>Dependabot / CodeQL]
+    Q3 -- "否 / No" --> P1
+    Q3 -- "是 / Yes" --> PUB[转 Public<br/>Secret Scanning /<br/>Dependabot / CodeQL]
     PUB --> P7[Phase 7<br/>发布后运营<br/>SOP/07]
     P7 --> E([Done 完成])
 ```
